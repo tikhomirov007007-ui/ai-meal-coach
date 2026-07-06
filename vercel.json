@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "framework": null,
+  "crons": [
+    {
+      "path": "/api/cron/daily",
+      "schedule": "0 8 * * *"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/mini-app",
+      "destination": "/mini-app/index.html"
+    }
+  ]
+}

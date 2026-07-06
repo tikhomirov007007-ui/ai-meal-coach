@@ -1,0 +1,36 @@
+{
+  "name": "ai-meal-coach",
+  "version": "1.0.0",
+  "description": "AI Meal Coach — Telegram bot + Mini App for food photo calorie tracking",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc --noEmit",
+    "start": "node dist/index.js",
+    "db:migrate": "tsx src/db/migrate.ts"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "grammy": "^1.35.0",
+    "node-cron": "^3.0.3",
+    "openai": "^4.77.0",
+    "pg": "^8.13.1",
+    "pg-mem": "^3.0.5",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "@types/node-cron": "^3.0.11",
+    "@types/pg": "^8.11.10",
+    "@vercel/node": "^3.2.29",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

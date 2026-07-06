@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AI Meal Coach</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <button class="header-btn" id="closeBtn" aria-label="Закрыть">✕</button>
+    <h1 class="header-title">AI Meal Coach</h1>
+    <button class="header-btn" id="profileBtn" aria-label="Профиль">👤</button>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="today">Сегодня</button>
+    <button class="tab" data-tab="history">История</button>
+    <button class="tab" data-tab="stats">Статистика</button>
+  </nav>
+
+  <main id="content">
+    <div id="today" class="panel active">
+      <div class="progress-card">
+        <div class="progress-header">
+          <span class="progress-label">Калории сегодня</span>
+          <span class="progress-value" id="todayCalories">0 / 2000</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="macros" id="todayMacros">
+          <div class="macro"><span>Б</span><strong id="proteinToday">0g</strong></div>
+          <div class="macro"><span>Ж</span><strong id="fatToday">0g</strong></div>
+          <div class="macro"><span>У</span><strong id="carbsToday">0g</strong></div>
+        </div>
+      </div>
+      <h2 class="section-title">Приёмы пищи</h2>
+      <ul class="meal-list" id="todayMeals"></ul>
+      <p class="empty-state" id="todayEmpty">Пока ничего не записано. Отправь фото блюда в бот!</p>
+    </div>
+
+    <div id="history" class="panel">
+      <h2 class="section-title">Последние 7 дней</h2>
+      <div id="historyList"></div>
+      <p class="empty-state" id="historyEmpty">История пуста</p>
+    </div>
+
+    <div id="stats" class="panel">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Среднее ккал/день</span>
+          <strong class="stat-value" id="avgCalories">—</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Цель</span>
+          <strong class="stat-value" id="goalKcal">2000</strong>
+        </div>
+      </div>
+      <h2 class="section-title">Калории за неделю</h2>
+      <div class="chart" id="weeklyChart"></div>
+      <h2 class="section-title">Макросы (среднее)</h2>
+      <div class="macros stats-macros">
+        <div class="macro"><span>Белки</span><strong id="avgProtein">—</strong></div>
+        <div class="macro"><span>Жиры</span><strong id="avgFat">—</strong></div>
+        <div class="macro"><span>Углеводы</span><strong id="avgCarbs">—</strong></div>
+      </div>
+      <h2 class="section-title">Топ блюда</h2>
+      <ul class="top-dishes" id="topDishes"></ul>
+    </div>
+  </main>
+
+  <div class="profile-modal hidden" id="profileModal">
+    <div class="modal-content">
+      <h2>Профиль</h2>
+      <label>
+        Дневная норма (ккал)
+        <input type="number" id="goalInput" min="500" max="10000" value="2000" />
+      </label>
+      <label>
+        Часовой пояс
+        <select id="timezoneSelect">
+          <option value="UTC">UTC</option>
+          <option value="Europe/Moscow">Москва (UTC+3)</option>
+          <option value="Europe/Kiev">Киев (UTC+2)</option>
+          <option value="Asia/Almaty">Алматы (UTC+5)</option>
+        </select>
+      </label>
+      <div class="premium-badge" id="premiumBadge"></div>
+      <button class="btn primary" id="saveProfile">Сохранить</button>
+      <button class="btn secondary" id="closeProfile">Закрыть</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
