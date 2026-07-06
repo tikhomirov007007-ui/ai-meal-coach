@@ -6,17 +6,24 @@ import { createApp } from "./api/server";
 import { config } from "./config";
 
 let initialized = false;
+let initPromise: Promise<void> | null = null;
 let app: Application | null = null;
 let bot: Bot | null = null;
 
 export async function ensureInitialized(): Promise<void> {
   if (initialized) return;
-  await migrate();
-  app = createApp({ serveStatic: !process.env.VERCEL });
-  if (!config.skipBot) {
-    bot = createBot();
-  }
-  initialized = true;
+  if (initPromise) return initPromise;
+
+  initPromise = (async () => {
+    await migrate();
+    app = createApp({ serveStatic: !process.env.VERCEL });
+    if (!config.skipBot) {
+      bot = createBot();
+    }
+    initialized = true;
+  })();
+
+  return initPromise;
 }
 
 export async function getApp(): Promise<Application> {

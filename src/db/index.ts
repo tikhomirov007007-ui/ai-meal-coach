@@ -1,8 +1,7 @@
 import { Pool } from "pg";
 import { newDb } from "pg-mem";
-import fs from "fs";
-import path from "path";
 import { config } from "../config";
+import { SCHEMA_SQL } from "./schema";
 import type { DailyStats, Meal, User, WeeklyStats } from "../types";
 
 function createPool(): Pool {
@@ -21,15 +20,25 @@ function createPool(): Pool {
     const { Pool: MemPool } = db.adapters.createPg();
     return new MemPool();
   }
-  return new Pool({ connectionString: config.databaseUrl });
+
+  const needsSsl =
+    config.databaseUrl.includes("neon.tech") ||
+    config.databaseUrl.includes("sslmode=require") ||
+    config.databaseUrl.includes("supabase.co");
+
+  return new Pool({
+    connectionString: config.databaseUrl,
+    connectionTimeoutMillis: 10_000,
+    idleTimeoutMillis: 30_000,
+    max: 5,
+    ssl: needsSsl ? { rejectUnauthorized: false } : undefined,
+  });
 }
 
 export const pool = createPool();
 
 export async function migrate(): Promise<void> {
-  const schemaPath = path.join(__dirname, "schema.sql");
-  const sql = fs.readFileSync(schemaPath, "utf-8");
-  await pool.query(sql);
+  await pool.query(SCHEMA_SQL);
 }
 
 export async function ensureUser(

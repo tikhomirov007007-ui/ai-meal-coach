@@ -173,8 +173,15 @@ export function createApiRouter(): express.Router {
 export function createApp(options: { serveStatic?: boolean } = {}): express.Application {
   const { serveStatic = true } = options;
   const app = express();
+  const router = createApiRouter();
 
-  app.use("/api", createApiRouter());
+  // Local dev: Express listens on :3000, routes are /api/*
+  app.use("/api", router);
+
+  // Vercel catch-all (api/[...slug].ts): req.url may be /api/* or /* depending on routing
+  if (process.env.VERCEL) {
+    app.use(router);
+  }
 
   if (serveStatic) {
     const miniAppPath = path.join(__dirname, "../../mini-app");

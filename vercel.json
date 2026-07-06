@@ -2,9 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "framework": null,
-  "buildCommand": "npm run build",
+  "buildCommand": "echo 'Build skipped'",
   "installCommand": "npm install",
   "functions": {
+    "api/webhook.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
     "api/**/*.ts": {
       "maxDuration": 30,
       "memory": 1024
