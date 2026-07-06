@@ -2,18 +2,20 @@
   "name": "ai-meal-coach",
   "version": "1.0.0",
   "description": "AI Meal Coach — Telegram bot + Mini App for food photo calorie tracking",
-  "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "echo \"Build complete — Vercel compiles api/ automatically\"",
+    "build": "node scripts/vercel-build.js",
+    "vercel-build": "node scripts/vercel-build.js",
     "build:check": "npx tsc --noEmit",
-    "start": "node dist/index.js",
+    "start": "tsx src/index.ts",
     "db:migrate": "tsx src/db/migrate.ts"
   },
   "engines": {
-    "node": ">=18"
+    "node": "20.x"
   },
   "dependencies": {
+    "@vercel/node": "^3.2.29",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -22,7 +24,7 @@
     "openai": "^4.77.0",
     "pg": "^8.13.1",
     "pg-mem": "^3.0.5",
-    "serverless-http": "^3.2.0"
+    "typescript": "^5.7.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -30,8 +32,6 @@
     "@types/node": "^22.10.2",
     "@types/node-cron": "^3.0.11",
     "@types/pg": "^8.11.10",
-    "@vercel/node": "^3.2.29",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "tsx": "^4.19.2"
   }
 }
