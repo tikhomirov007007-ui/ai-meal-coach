@@ -5,9 +5,9 @@ import {
   isPremiumActive,
   updateUserGoal,
   updateUserTimezone,
-} from "../../src/db";
-import { validateInitData } from "../../src/services/telegramAuth";
-import { requireTelegramUser } from "../../src/lib/vercel";
+} from "../src/db";
+import { validateInitData } from "../src/services/telegramAuth";
+import { readJsonBody, requireTelegramUser } from "../src/lib/vercel";
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   try {

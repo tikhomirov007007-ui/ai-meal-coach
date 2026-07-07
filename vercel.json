@@ -7,11 +7,13 @@
   "functions": {
     "api/webhook.ts": {
       "maxDuration": 60,
-      "memory": 1024
+      "memory": 1024,
+      "includeFiles": "src/**"
     },
     "api/**/*.ts": {
       "maxDuration": 30,
-      "memory": 1024
+      "memory": 1024,
+      "includeFiles": "src/**"
     }
   },
   "crons": [

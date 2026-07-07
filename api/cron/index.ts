@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getBotInstance } from "../src/bot/instance";
-import { sendDailyReminders } from "../src/services/notifications";
-import { withTimeout } from "../src/lib/vercel";
+import { getBotInstance } from "../../src/bot/instance";
+import { sendDailyReminders } from "../../src/services/notifications";
+import { withTimeout } from "../../src/lib/vercel";
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
   try {
