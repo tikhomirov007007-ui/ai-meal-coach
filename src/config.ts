@@ -11,14 +11,18 @@ function required(name: string): string {
 }
 
 const devMode = process.env.DEV_MODE === "true";
+const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "";
 const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
-const publicBaseUrl = process.env.WEBHOOK_URL || vercelUrl || `http://localhost:${process.env.PORT ?? "3000"}`;
+const publicBaseUrl =
+  process.env.WEBHOOK_URL || vercelProductionUrl || vercelUrl || `http://localhost:${process.env.PORT ?? "3000"}`;
 
 export const config = {
   devMode,
   skipBot: process.env.SKIP_BOT === "true" || (devMode && !process.env.VERCEL),
   botToken: devMode && !process.env.VERCEL ? (process.env.BOT_TOKEN ?? "dev-token") : required("BOT_TOKEN"),
-  webhookUrl: process.env.WEBHOOK_URL ?? vercelUrl,
+  webhookUrl: process.env.WEBHOOK_URL || vercelProductionUrl || vercelUrl,
   webhookSecret: process.env.WEBHOOK_SECRET ?? "dev-secret",
   openaiApiKey: devMode && !process.env.VERCEL ? (process.env.OPENAI_API_KEY ?? "sk-dev") : required("OPENAI_API_KEY"),
   databaseUrl: process.env.DATABASE_URL ?? (devMode && !process.env.VERCEL ? "memory" : required("DATABASE_URL")),

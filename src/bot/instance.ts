@@ -11,7 +11,9 @@ export async function getBotInstance(): Promise<Bot> {
   if (!initPromise) {
     initPromise = (async () => {
       await migrate();
-      bot = createBot();
+      const instance = createBot();
+      await instance.init();
+      bot = instance;
       return bot;
     })();
   }

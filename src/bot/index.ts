@@ -20,7 +20,17 @@ import { formatDailySummary, formatMealCard, todayDateStr } from "../utils/forma
 export function createBot(): Bot {
   const bot = new Bot(config.botToken);
 
-  bot.api.setMyCommands([
+  bot.catch(async (err) => {
+    console.error("Bot handler error:", err.error);
+    const ctx = err.ctx;
+    try {
+      await ctx.reply("❌ Произошла ошибка. Попробуй ещё раз или отправь /start.");
+    } catch {
+      // ignore secondary failures
+    }
+  });
+
+  void bot.api.setMyCommands([
     { command: "photo", description: "Загрузить фото блюда" },
     { command: "history", description: "История за сегодня" },
     { command: "stats", description: "Статистика за неделю" },
