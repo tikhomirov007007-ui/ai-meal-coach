@@ -40,15 +40,17 @@ export function createBot(): Bot {
   ]);
 
   bot.command("start", async (ctx) => {
-    await registerUser(ctx);
+    try {
+      await registerUser(ctx);
+    } catch (err) {
+      console.error("registerUser failed:", err);
+    }
+
     await ctx.reply(
       "👋 Привет! Я <b>AI Meal Coach</b> — твой персональный тренер по питанию.\n\n" +
         "📸 Загрузи фото блюда — узнаешь калории и макросы за 3 секунды.\n\n" +
         "Используй /photo или просто отправь фото прямо в чат!",
-      {
-        parse_mode: "HTML",
-        reply_markup: mainKeyboard(),
-      }
+      { parse_mode: "HTML", reply_markup: textKeyboard() }
     );
   });
 
@@ -338,13 +340,20 @@ async function sendInvoice(ctx: Context, plan: "weekly" | "monthly"): Promise<vo
   ]);
 }
 
+function textKeyboard(): Keyboard {
+  return new Keyboard().text("📸 Фото").text("📋 История").resized();
+}
+
 function mainKeyboard(): Keyboard {
-  return new Keyboard()
-    .webApp("📊 Открыть приложение", config.miniAppUrl)
-    .row()
-    .text("📸 Фото")
-    .text("📋 История")
-    .resized();
+  if (config.miniAppUrl.startsWith("https://")) {
+    return new Keyboard()
+      .webApp("📊 Открыть приложение", config.miniAppUrl)
+      .row()
+      .text("📸 Фото")
+      .text("📋 История")
+      .resized();
+  }
+  return textKeyboard();
 }
 
 function statsKeyboard(): InlineKeyboard {

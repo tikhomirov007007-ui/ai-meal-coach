@@ -1,23 +1,15 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { webhookCallback } from "grammy";
 import { getBotInstance } from "../src/bot/instance";
-import { withTimeout } from "../src/lib/vercel";
 
-function parseUpdate(req: VercelRequest): Record<string, unknown> | null {
-  const body = req.body;
+let webhookHandler: ReturnType<typeof webhookCallback> | null = null;
 
-  if (body && typeof body === "object" && !Buffer.isBuffer(body)) {
-    return body as Record<string, unknown>;
+async function getHandler() {
+  if (!webhookHandler) {
+    const bot = await getBotInstance();
+    webhookHandler = webhookCallback(bot, "http");
   }
-
-  if (typeof body === "string" && body.length > 0) {
-    return JSON.parse(body) as Record<string, unknown>;
-  }
-
-  if (Buffer.isBuffer(body)) {
-    return JSON.parse(body.toString("utf8")) as Record<string, unknown>;
-  }
-
-  return null;
+  return webhookHandler;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse): Promise<void> {
@@ -40,20 +32,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse): 
   }
 
   try {
-    const update = parseUpdate(req);
-    if (!update) {
-      res.status(400).json({ error: "Empty update body" });
-      return;
-    }
-
-    console.log("Webhook update:", update.update_id, Object.keys(update));
-
-    const bot = await withTimeout(getBotInstance(), 20_000, "Bot init");
-    await withTimeout(bot.handleUpdate(update), 55_000, "Handle update");
-
-    res.status(200).json({ ok: true });
+    const handle = await getHandler();
+    await handle(req, res);
   } catch (err) {
     console.error("Webhook error:", err);
-    res.status(200).json({ ok: true, error: err instanceof Error ? err.message : String(err) });
+    if (!res.headersSent) {
+      res.status(200).json({ ok: true });
+    }
   }
 }
