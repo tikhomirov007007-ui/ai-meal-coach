@@ -47,10 +47,9 @@ export function createBot(): Bot {
     }
 
     await ctx.reply(
-      "👋 Привет! Я <b>AI Meal Coach</b> — твой персональный тренер по питанию.\n\n" +
-        "📸 Загрузи фото блюда — узнаешь калории и макросы за 3 секунды.\n\n" +
-        "Используй /photo или просто отправь фото прямо в чат!",
-      { parse_mode: "HTML", reply_markup: textKeyboard() }
+      "Привет! Я AI Meal Coach — твой тренер по питанию.\n\n" +
+        "Загрузи фото блюда — узнаешь калории и макросы.\n" +
+        "Команды: /photo /history /help"
     );
   });
 
